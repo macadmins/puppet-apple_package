@@ -9,8 +9,10 @@ Puppet::Type.type(:apple_package_installer).provide(:macos) do
   require 'puppet/util/plist' if Puppet.features.cfpropertylist?
   require 'digest'
 
-  def check_for_install(receipt, version, installs, checksum)
+  def check_for_install(receipt, version, installs, checksum, force_install)
     installed = true
+
+    return false if force_install == true
     
     # check if receipt is present at all
     installed_receipts = pkgutil(['--pkgs-plist'])
@@ -49,7 +51,8 @@ Puppet::Type.type(:apple_package_installer).provide(:macos) do
       resource[:receipt], 
       resource[:version],
       resource[:installs],
-      resource[:checksum]
+      resource[:checksum],
+      resource[:force_install]
     ) == true
   end
 

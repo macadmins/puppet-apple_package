@@ -5,7 +5,8 @@ define apple_package (
   String $receipt,
   String $version,
   Array $installs = [],
-  Array $checksum = []
+  Array $checksum = [],
+  Boolean $force_install = false
   ) {
   
   $package_location = "${facts['puppet_vardir']}/packages/${title}.pkg"
@@ -25,11 +26,12 @@ define apple_package (
   }
 
   apple_package_installer {"${title}":
-    ensure   => $ensure,
-    package  => $package_location,
-    receipt  => $receipt,
-    version  => $version,
-    installs => $installs,
-    checksum => $checksum,
+    ensure        => $ensure,
+    package       => $package_location,
+    receipt       => $receipt,
+    version       => $version,
+    installs      => $installs,
+    checksum      => $checksum,
+    force_install => $force_install,
   }
 }
