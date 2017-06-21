@@ -6,6 +6,7 @@ This Puppet module provides a better method to install packages for macOS than t
 * Verifies that the specified version is installed.
 * If passed an array of files to verify, it will reinstall the package if any of the files are missing (optional).
 * If passed an array of SHA1 checksums, it will reinstall the package if any of the files specified have a different checksum (optional).
+* If passed a parameter of downgrade set to true and a newer version is installed, it will be downgraded to the specified version.  Otherwise, newer versions are left untouched.
 
 ## Example
 
@@ -18,6 +19,7 @@ node default {
     receipt  => 'com.googlecode.munki.core',
     installs => ['/Applications/Managed Software Center.app/Contents/MacOS/Managed Software Center', '/usr/local/munki/managedsoftwareupdate'],
     checksum => ['f01ff7cc2b0ed727980f43990424a9124a487285', '768c21b2b89dfd6af8524e5ba4cb67b8c32e5d98'],
+    downgrade => true,
     # WARNING - this will cause the package to install every run, be clever when you use this
     force_install => true
   }

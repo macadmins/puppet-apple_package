@@ -9,11 +9,11 @@ Puppet::Type.type(:apple_package_installer).provide(:macos) do
   require 'puppet/util/plist' if Puppet.features.cfpropertylist?
   require 'digest'
 
-  def check_for_install(receipt, version, installs, checksum, force_install)
+  def check_for_install(receipt, version, installs, checksum, force_install, downgrade)
     installed = true
 
     return false if force_install == true
-    
+
     # check if receipt is present at all
     installed_receipts = pkgutil(['--pkgs-plist'])
     installed_receipts = Puppet::Util::Plist.parse_plist(installed_receipts)
@@ -26,16 +26,20 @@ Puppet::Type.type(:apple_package_installer).provide(:macos) do
     installed_info = Puppet::Util::Plist.parse_plist(installed_info)
     Puppet.debug "#check_for_install installed_info: #{installed_info}"
     Puppet.debug "#check_for_install version: #{version}"
-    return false unless version == installed_info['pkg-version']
+    if downgrade
+      return false unless Gem::Version.new(version) == Gem::Version.new(installed_info['pkg-version'])
+    else
+      return false unless Gem::Version.new(installed_info['pkg-version']) >= Gem::Version.new(version)
+    end
 
     # if installs files are given, check for presence
     installs_counter = 0
-    unless installs == nil
+    unless installs.nil?
       installs.each do |install|
         Puppet.debug "#check_for_install install: #{install}"
         return false unless File.exist?(install)
         # if checksums are given, make sure the files match
-        if checksum.length >= installs_counter and checksum != []
+        if checksum.length >= installs_counter && checksum != []
           Puppet.debug "#check_for_install checksum[installs_counter]: #{checksum[installs_counter]}"
           return false unless checksum[installs_counter] == Digest::SHA1.file(install).hexdigest
         end
@@ -48,11 +52,12 @@ Puppet::Type.type(:apple_package_installer).provide(:macos) do
 
   def exists?
     check_for_install(
-      resource[:receipt], 
+      resource[:receipt],
       resource[:version],
       resource[:installs],
       resource[:checksum],
-      resource[:force_install]
+      resource[:force_install],
+      resource[:downgrade]
     ) == true
   end
 
