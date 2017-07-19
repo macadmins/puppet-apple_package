@@ -26,7 +26,7 @@ Puppet::Type.type(:apple_package_installer).provide(:macos) do
     installed_info = Puppet::Util::Plist.parse_plist(installed_info)
     Puppet.debug "#check_for_install installed_info: #{installed_info}"
     Puppet.debug "#check_for_install version: #{version}"
-    if downgrade
+    if downgrade == true
       return false unless Gem::Version.new(version) == Gem::Version.new(installed_info['pkg-version'])
     else
       return false unless Gem::Version.new(installed_info['pkg-version']) >= Gem::Version.new(version)
