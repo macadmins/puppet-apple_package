@@ -18,6 +18,8 @@ define apple_package (
     }
   }
 
+  notify{$downgrade:}
+
   file { $package_location:
     ensure  => file,
     source  => $source,
