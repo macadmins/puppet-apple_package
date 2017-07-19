@@ -25,13 +25,13 @@ Puppet::Type.newtype(:apple_package_installer) do
     desc 'Array of checksums'
   end
 
-  newparam(:force_install, :boolean => true, :parent => Puppet::Parameter::Boolean) do
-    desc 'Force install of package no matter what the state is'
+  newparam(:downgrade, :boolean => true, :parent => Puppet::Parameter::Boolean) do
+    desc 'Downgrade package if a newer version is already installed'
     defaultto :false
   end
 
-  newparam(:downgrade, :boolean => true, :parent => Puppet::Parameter::Boolean) do
-    desc 'Downgrade package if a newer version is already installed'
+  newparam(:force_install, :boolean => true, :parent => Puppet::Parameter::Boolean) do
+    desc 'Force install of package no matter what the state is'
     defaultto :false
   end
 end
