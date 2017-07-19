@@ -17,8 +17,6 @@ define apple_package (
       ensure => directory,
     }
   }
-  $new_downgrade = bool2str($downgrade)
-  notify{"${title} - ${new_downgrade}": }
 
   file { $package_location:
     ensure  => file,
@@ -29,14 +27,13 @@ define apple_package (
   }
 
   apple_package_installer {$title:
-    ensure        => $ensure,
-    package       => $package_location,
-    receipt       => $receipt,
-    version       => $version,
-    installs      => $installs,
-    checksum      => $checksum,
-    force_install => $force_install,
-    downgrade     => $downgrade,
-    require => Notify["${title} - ${new_downgrade}"]
+    ensure           => $ensure,
+    package          => $package_location,
+    receipt          => $receipt,
+    version          => $version,
+    installs         => $installs,
+    checksum         => $checksum,
+    force_install    => $force_install,
+    preserve_version => $downgrade,
   }
 }
