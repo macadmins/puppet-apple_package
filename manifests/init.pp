@@ -17,8 +17,8 @@ define apple_package (
       ensure => directory,
     }
   }
-
-  notify{bool2str($downgrade): }
+  $new_downgrade = bool2str($downgrade)
+  notify{"${title} - ${new_downgrade}": }
 
   file { $package_location:
     ensure  => file,
