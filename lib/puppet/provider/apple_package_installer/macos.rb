@@ -26,11 +26,11 @@ Puppet::Type.type(:apple_package_installer).provide(:macos) do
     installed_info = Puppet::Util::Plist.parse_plist(installed_info)
     Puppet.debug "#check_for_install installed_info: #{installed_info}"
     Puppet.debug "#check_for_install version: #{version}"
-    if preserve_version == true
-      return false unless Gem::Version.new(version) == Gem::Version.new(installed_info['pkg-version'])
-    else
-      return false unless Gem::Version.new(installed_info['pkg-version']) >= Gem::Version.new(version)
-    end
+    # if preserve_version == true
+    #   return false unless Gem::Version.new(version) == Gem::Version.new(installed_info['pkg-version'])
+    # else
+    #   return false unless Gem::Version.new(installed_info['pkg-version']) >= Gem::Version.new(version)
+    # end
 
     # if installs files are given, check for presence
     installs_counter = 0
