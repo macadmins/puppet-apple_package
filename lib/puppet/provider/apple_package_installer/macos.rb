@@ -9,7 +9,7 @@ Puppet::Type.type(:apple_package_installer).provide(:macos) do
   require 'puppet/util/plist' if Puppet.features.cfpropertylist?
   require 'digest'
 
-  def check_for_install(receipt, version, installs, checksum, force_install, downgrade)
+  def check_for_install(receipt, version, installs, checksum, force_install, preserve_version)
     installed = true
 
     return false if force_install == true
@@ -26,7 +26,7 @@ Puppet::Type.type(:apple_package_installer).provide(:macos) do
     installed_info = Puppet::Util::Plist.parse_plist(installed_info)
     Puppet.debug "#check_for_install installed_info: #{installed_info}"
     Puppet.debug "#check_for_install version: #{version}"
-    if downgrade == true
+    if preserve_version == true
       return false unless Gem::Version.new(version) == Gem::Version.new(installed_info['pkg-version'])
     else
       return false unless Gem::Version.new(installed_info['pkg-version']) >= Gem::Version.new(version)
@@ -57,7 +57,7 @@ Puppet::Type.type(:apple_package_installer).provide(:macos) do
       resource[:installs],
       resource[:checksum],
       resource[:force_install],
-      resource[:downgrade]
+      resource[:preserve_version]
     ) == true
   end
 

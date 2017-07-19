@@ -25,7 +25,7 @@ Puppet::Type.newtype(:apple_package_installer) do
     desc 'Array of checksums'
   end
 
-  newparam(:downgrade, :boolean => true, :parent => Puppet::Parameter::Boolean) do
+  newparam(:preserve_version, :boolean => true, :parent => Puppet::Parameter::Boolean) do
     desc 'Downgrade package if a newer version is already installed'
     defaultto :false
   end
