@@ -7,7 +7,7 @@ define apple_package (
   Array $installs = [],
   Array $checksum = [],
   Boolean $force_install = false,
-  Boolean $downgrade = false
+  Boolean $preserve_version = false
 ) {
 
   $package_location = "${facts['puppet_vardir']}/packages/${title}.pkg"
@@ -34,6 +34,6 @@ define apple_package (
     installs         => $installs,
     checksum         => $checksum,
     force_install    => $force_install,
-    preserve_version => $downgrade,
+    preserve_version => $preserve_version,
   }
 }
