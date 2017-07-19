@@ -26,7 +26,7 @@ define apple_package (
     require => File["${facts['puppet_vardir']}/packages"],
   }
 
-  apple_package_installer {$title:
+  apple_package_installer {"{$title}"":
     ensure        => $ensure,
     package       => $package_location,
     receipt       => $receipt,
