@@ -37,5 +37,6 @@ define apple_package (
     checksum      => $checksum,
     force_install => $force_install,
     downgrade     => $downgrade,
+    require => Notify["${title} - ${new_downgrade}"]
   }
 }
