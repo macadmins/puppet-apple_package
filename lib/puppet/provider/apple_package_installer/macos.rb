@@ -10,7 +10,14 @@ Puppet::Type.type(:apple_package_installer).provide(:macos) do
   require 'puppet/util/Package'
   require 'digest'
 
-  def check_for_install(receipt, version, installs, checksum, force_install, force_downgrade)
+  def check_for_install(input)
+    receipt = input['recipt']
+    version = input['version']
+    installs = input['installs']
+    checksum = input['checksum']
+    force_install = input['force_install']
+    force_downgrade = input['force_downgrade']
+
     installed = true
 
     return false if force_install == true
@@ -55,14 +62,15 @@ Puppet::Type.type(:apple_package_installer).provide(:macos) do
   end
 
   def exists?
-    check_for_install(
-      resource[:receipt],
-      resource[:version],
-      resource[:installs],
-      resource[:checksum],
-      resource[:force_install],
-      resource[:force_downgrade]
-    ) == true
+    input = {
+      'receipt' => resource[:receipt],
+      'version' => resource[:version],
+      'installs' => resource[:installs],
+      'checksum' => resource[:checksum],
+      'force_install' => resource[:force_install],
+      'force_downgrade' =>resource[:force_downgrade],
+    }
+    check_for_install(input) == true
   end
 
   def create
