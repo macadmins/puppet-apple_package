@@ -7,9 +7,10 @@ Puppet::Type.type(:apple_package_installer).provide(:macos) do
   commands pkgutil: '/usr/sbin/pkgutil'
 
   require 'puppet/util/plist' if Puppet.features.cfpropertylist?
+  require 'puppet/util/Package'
   require 'digest'
 
-  def check_for_install(receipt, version, installs, checksum, force_install, downgrade)
+  def check_for_install(receipt, version, installs, checksum, force_install, force_downgrade)
     installed = true
 
     return false if force_install == true
@@ -26,10 +27,12 @@ Puppet::Type.type(:apple_package_installer).provide(:macos) do
     installed_info = Puppet::Util::Plist.parse_plist(installed_info)
     Puppet.debug "#check_for_install installed_info: #{installed_info}"
     Puppet.debug "#check_for_install version: #{version}"
-    if downgrade
-      return false unless Gem::Version.new(version) == Gem::Version.new(installed_info['pkg-version'])
+    version_result = Puppet::Util::Package.versioncmp(version, installed_info['pkg-version'])
+    Puppet.debug "#check for install versioncmp result: #{version_result}"
+    if force_downgrade == true
+      return false unless version_result == 0
     else
-      return false unless Gem::Version.new(installed_info['pkg-version']) >= Gem::Version.new(version)
+      return false unless version_result == -1
     end
 
     # if installs files are given, check for presence
@@ -57,7 +60,7 @@ Puppet::Type.type(:apple_package_installer).provide(:macos) do
       resource[:installs],
       resource[:checksum],
       resource[:force_install],
-      resource[:downgrade]
+      resource[:force_downgrade]
     ) == true
   end
 

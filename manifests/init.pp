@@ -1,13 +1,13 @@
 # Ensures an Apple package is installed
 define apple_package (
-  String $ensure = 'present',
   String $source,
   String $receipt,
   String $version,
+  String $ensure = 'present',
   Array $installs = [],
   Array $checksum = [],
   Boolean $force_install = false,
-  Boolean $downgrade = false
+  Boolean $force_downgrade = false
 ) {
 
   $package_location = "${facts['puppet_vardir']}/packages/${title}.pkg"
@@ -27,13 +27,13 @@ define apple_package (
   }
 
   apple_package_installer {$title:
-    ensure        => $ensure,
-    package       => $package_location,
-    receipt       => $receipt,
-    version       => $version,
-    installs      => $installs,
-    checksum      => $checksum,
-    force_install => $force_install,
-    downgrade     => $downgrade,
+    ensure          => $ensure,
+    package         => $package_location,
+    receipt         => $receipt,
+    version         => $version,
+    installs        => $installs,
+    checksum        => $checksum,
+    force_install   => $force_install,
+    force_downgrade => $force_downgrade,
   }
 }
