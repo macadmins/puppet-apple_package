@@ -28,7 +28,8 @@ Puppet::Type.type(:apple_package_installer).provide(:macos) do
     Puppet.debug "#check_for_install installed_info: #{installed_info}"
     Puppet.debug "#check_for_install version: #{version}"
     version_result = Puppet::Util::Package.versioncmp(version, installed_info['pkg-version'])
-    Puppet.debug "#check for install versioncmp result: #{version_result}"
+    Puppet.debug "#check_for_install versioncmp result: #{version_result}"
+    Puppet.debug "#check_for)install force_downgrade: #{force_downgrade}"
     if force_downgrade == true
       return false unless version_result == 0
     else
