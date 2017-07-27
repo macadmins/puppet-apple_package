@@ -27,9 +27,11 @@ Puppet::Type.newtype(:apple_package_installer) do
 
   newparam(:force_downgrade) do
     desc 'Downgrade package if a newer version is already installed'
+    defaultto :false
   end
 
   newparam(:force_install) do
     desc 'Force install of package no matter what the state is'
+    defaultto :false
   end
 end

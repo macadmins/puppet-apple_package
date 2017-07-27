@@ -10,14 +10,7 @@ Puppet::Type.type(:apple_package_installer).provide(:macos) do
   require 'puppet/util/Package'
   require 'digest'
 
-  def check_for_install(input)
-    receipt = input['recipt']
-    version = input['version']
-    installs = input['installs']
-    checksum = input['checksum']
-    force_install = input['force_install']
-    force_downgrade = input['force_downgrade']
-
+  def check_for_install(receipt, version, installs, checksum, force_install, force_downgrade)
     installed = true
 
     return false if force_install == true
@@ -36,11 +29,11 @@ Puppet::Type.type(:apple_package_installer).provide(:macos) do
     Puppet.debug "#check_for_install version: #{version}"
     version_result = Puppet::Util::Package.versioncmp(version, installed_info['pkg-version'])
     Puppet.debug "#check_for_install versioncmp result: #{version_result}"
-    Puppet.debug "#check_for)install force_downgrade: #{force_downgrade}"
+    Puppet.debug "#check_for_install force_downgrade: #{force_downgrade}"
     if force_downgrade == true
       return false unless version_result == 0
     else
-      return false unless version_result == -1
+      return false if version_result == -1
     end
 
     # if installs files are given, check for presence
@@ -57,20 +50,19 @@ Puppet::Type.type(:apple_package_installer).provide(:macos) do
         installs_counter += 1
       end
     end
-
+    Puppet.debug "#check_for_install final installed value #{installed}"
     installed
   end
 
   def exists?
-    input = {
-      'receipt' => resource[:receipt],
-      'version' => resource[:version],
-      'installs' => resource[:installs],
-      'checksum' => resource[:checksum],
-      'force_install' => resource[:force_install],
-      'force_downgrade' =>resource[:force_downgrade],
-    }
-    check_for_install(input) == true
+    check_for_install(
+      resource[:receipt],
+      resource[:version],
+      resource[:installs],
+      resource[:checksum],
+      resource[:force_install],
+      resource[:force_downgrade]
+    ) == true
   end
 
   def create
