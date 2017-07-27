@@ -19,10 +19,12 @@ Puppet::Type.newtype(:apple_package_installer) do
 
   newparam(:installs) do
     desc 'Array of files the package installs'
+    defaultto []
   end
 
   newparam(:checksum) do
     desc 'Array of checksums'
+    defaultto []
   end
 
   newparam(:force_downgrade) do
