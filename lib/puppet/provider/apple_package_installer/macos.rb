@@ -33,7 +33,7 @@ Puppet::Type.type(:apple_package_installer).provide(:macos) do
     if force_downgrade == true
       return false unless version_result == 0
     else
-      return false if version_result == -1
+      return false if version_result == 1
     end
 
     # if installs files are given, check for presence
