@@ -7,7 +7,7 @@ Puppet::Type.type(:apple_package_installer).provide(:macos) do
   commands pkgutil: '/usr/sbin/pkgutil'
 
   require 'puppet/util/plist' if Puppet.features.cfpropertylist?
-  require 'puppet/util/Package'
+  require 'puppet/util/package'
   require 'digest'
 
   def check_for_install(receipt, version, installs, checksum, force_install, force_downgrade)
