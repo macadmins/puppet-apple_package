@@ -7,7 +7,12 @@ define apple_package (
   Array $installs = [],
   Array $checksum = [],
   Boolean $force_install = false,
-  Boolean $force_downgrade = false
+  Boolean $force_downgrade = false,
+  Boolean $remote_package = false,
+  String $http_checksum = '',
+  String $http_checksum_type = 'sha256',
+  String $http_username = '',
+  String $http_password = ''
 ) {
 
   $package_location = "${facts['puppet_vardir']}/packages/${title}.pkg"
@@ -18,13 +23,27 @@ define apple_package (
     }
   }
 
-  file { $package_location:
-    ensure  => file,
-    source  => $source,
-    mode    => '0644',
-    backup  => false,
-    require => File["${facts['puppet_vardir']}/packages"],
+  if $remote_package {
+    remote_file { $package_location:
+      ensure        => present,
+      source        => $source,
+      checksum      => $http_checksum,
+      checksum_type => $http_checksum_type,
+      username      => $http_username,
+      password      => $http_password
+    }
+
+  } else {
+    file { $package_location:
+        ensure  => file,
+        source  => $source,
+        mode    => '0644',
+        backup  => false,
+        require => File["${facts['puppet_vardir']}/packages"],
+      }
   }
+
+
 
   apple_package_installer {$title:
     ensure          => $ensure,

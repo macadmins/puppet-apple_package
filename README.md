@@ -7,6 +7,7 @@ This Puppet module provides a better method to install packages for macOS than t
 * If passed an array of files to verify, it will reinstall the package if any of the files are missing (optional).
 * If passed an array of SHA1 checksums, it will reinstall the package if any of the files specified have a different checksum (optional).
 * If passed a parameter of downgrade set to true and a newer version is installed, it will be downgraded to the specified version.  Otherwise, newer versions are left untouched.
+* Can download packages from a webserver rather than relying on Puppet's fileserver.
 
 ## Example
 
