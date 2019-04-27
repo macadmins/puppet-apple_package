@@ -8,7 +8,6 @@ define apple_package (
   Array $checksum = [],
   Boolean $force_install = false,
   Boolean $force_downgrade = false,
-  Boolean $remote_package = false,
   String $http_checksum = '',
   String $http_checksum_type = 'sha256',
   String $http_username = '',
@@ -21,6 +20,12 @@ define apple_package (
     file { "${facts['puppet_vardir']}/packages":
       ensure => directory,
     }
+  }
+
+  if 'puppet:///' in $source {
+    $remote_package = false
+  } else {
+    $remote_package = true
   }
 
   if $remote_package {
