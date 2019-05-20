@@ -24,6 +24,8 @@ define apple_package (
 
   if 'puppet:///' in $source {
     $remote_package = false
+  } elsif 'file:///' in $source {
+    $remote_package = false
   } else {
     $remote_package = true
   }
