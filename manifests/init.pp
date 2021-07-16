@@ -29,15 +29,22 @@ define apple_package (
   }
 
   if $remote_package {
+    if $http_username != '' and $http_password != '' {
+      $http_attributes = {
+        'username' => $http_username,
+        'password' => $http_password,
+      }
+    } else {
+      $http_attributes = {}
+    }
+
     remote_file { $package_location:
       ensure        => present,
       source        => $source,
       checksum      => $http_checksum,
       checksum_type => $http_checksum_type,
-      username      => $http_username,
-      password      => $http_password
+      *             => $http_attributes,
     }
-
   } else {
     file { $package_location:
         ensure  => file,
@@ -47,8 +54,6 @@ define apple_package (
         require => File["${facts['puppet_vardir']}/packages"],
       }
   }
-
-
 
   apple_package_installer {$title:
     ensure          => $ensure,
