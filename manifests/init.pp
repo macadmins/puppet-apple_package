@@ -11,10 +11,17 @@ define apple_package (
   String $http_checksum = '',
   String $http_checksum_type = 'sha256',
   String $http_username = '',
-  String $http_password = ''
+  String $http_password = '',
+  String $type = ''
 ) {
 
-  $package_location = "${facts['puppet_vardir']}/packages/${title}.pkg"
+  if $type == '' {
+    $pkg_type = get_apple_package_type($source)
+  } else {
+    $pkg_type = $type
+  }
+
+  $package_location = "${facts['puppet_vardir']}/packages/${title}.${pkg_type}"
 
   if ! defined(File["${facts['puppet_vardir']}/packages"]) {
     file { "${facts['puppet_vardir']}/packages":
@@ -64,5 +71,6 @@ define apple_package (
     checksum        => $checksum,
     force_install   => $force_install,
     force_downgrade => $force_downgrade,
+    type            => $pkg_type,
   }
 }

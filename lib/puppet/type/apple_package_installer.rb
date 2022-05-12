@@ -36,4 +36,8 @@ Puppet::Type.newtype(:apple_package_installer) do
     desc 'Force install of package no matter what the state is'
     defaultto :false
   end
+
+  newparam(:type) do
+    desc 'Package type pkg|dmg, if not specified it will parse the source url extension, if no extension exists use pkg'
+  end
 end

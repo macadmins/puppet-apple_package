@@ -22,7 +22,9 @@ node default {
     checksum        => ['f01ff7cc2b0ed727980f43990424a9124a487285', '768c21b2b89dfd6af8524e5ba4cb67b8c32e5d98'],
     force_downgrade => true,
     # WARNING - this will cause the package to install every run, be clever when you use this
-    force_install   => true
+    force_install   => true,
+    # package type: pkg or dmg, if not specified it will parse the source url extension, if no extension exists use pkg
+    type            => 'pkg'
   }
 }
 ```
