@@ -38,3 +38,7 @@ The package is stored on disk, so it is recommended that this is only used for s
 ## Todo
 
 * Remove the package
+
+## macOS Version Compatibility
+
+Tested and compatible with macOS 26 (Tahoe).
