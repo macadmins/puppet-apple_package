@@ -43,6 +43,7 @@ define apple_package (
       source        => $source,
       checksum      => $http_checksum,
       checksum_type => $http_checksum_type,
+      require       => File["${facts['puppet_vardir']}/packages"],
       *             => $http_attributes,
     }
   } else {
